@@ -46,6 +46,7 @@ Note that since first 4 steps involve running on the GPU (VPU / VideoCore IV), t
 - [Raspberry Pi - Firmware files](https://github.com/raspberrypi/firmware)
 - [Raspberry Pi forums - boot sequence explanation](https://raspberrypi.stackexchange.com/questions/10442/what-is-the-boot-sequence)
 - [bcm2836-peripherals.pdf](https://datasheets.raspberrypi.com/bcm2836/bcm2836-peripherals.pdf)
+- [bcm2835-peripherals.pdf](https://datasheets.raspberrypi.com/bcm2835/bcm2835-peripherals.pdf) (*peripheral addresses are applicable to 2B as well*)
 - [raspberry-pi-2-b-reduced-schematics.pdf](https://datasheets.raspberrypi.com/rpi2/raspberry-pi-2-b-reduced-schematics.pdf)
 
 ### Additional Resources
