@@ -2,7 +2,8 @@
 
 .globl _start
 _start:
-    # Setup the stack.
+
+    /* Setup the stack */
     mov sp, #0x8000
 
     /* Load BSS addresses */
@@ -21,8 +22,11 @@ _start:
     cmp r4, r9
     blo 1b
 
+    /* Jump to C entry function */
     bl entry_c
 
+
+    /* Should not reach here! */
 halt:
     wfe
     b halt
