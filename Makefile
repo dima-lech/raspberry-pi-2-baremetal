@@ -38,3 +38,4 @@ obj/%.o: %.c
 
 clean:
 	rm -f obj/* out/*
+	rm -f sd/$(IMAGE_NAME).bin
