@@ -2,8 +2,8 @@ default: all
 
 IMAGE_NAME = baremetal
 CROSS_COMPILE=arm-none-eabi-
-CFLAGS = -mcpu=cortex-a7 -ffreestanding -nostdlib -fno-builtin -Wall -Wextra -g -O0
-OBJS = boot.o baremetal.o rpi_arch.o
+CFLAGS = -mcpu=cortex-a7 -fpic -ffreestanding -nostdlib -fno-builtin -Wall -Wextra -g -O0
+OBJS = boot.o baremetal.o rpi_arch.o utils.o
 
 OBJS_FILES = $(addprefix obj/,$(OBJS))
 IMAGE_BIN_FILE = out/$(IMAGE_NAME).bin
@@ -41,7 +41,7 @@ $(IMAGE_ELF_FILE): $(OBJS_FILES)
 	$(CROSS_COMPILE)gcc $(CFLAGS) -T src/linker.ld -o $@ $^
 
 $(OBJDUMP_FILE): $(IMAGE_ELF_FILE)
-	$(CROSS_COMPILE)objdump -S $< > $@
+	$(CROSS_COMPILE)objdump -Sx $< > $@
 
 $(READELF_FILE): $(IMAGE_ELF_FILE)
 	$(CROSS_COMPILE)readelf -a $< > $@

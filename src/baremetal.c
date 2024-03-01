@@ -1,12 +1,10 @@
 #include <stdint.h>
 #include "rpi_arch.h"
+#include "utils.h"
 
 
 
-extern void do_nothing();
 void blink(void);
-void uart_putc(char c);
-void print_str(char * str);
 
 
 
@@ -15,33 +13,9 @@ void print_str(char * str);
 */
 void entry_c(void)
 {
-	uart_putc('\r');
-	uart_putc('\n');
-	uart_putc('H');
-	uart_putc('e');
-	uart_putc('l');
-	uart_putc('l');
-	uart_putc('o');
-	uart_putc(' ');
-	uart_putc('W');
-	uart_putc('o');
-	uart_putc('r');
-	uart_putc('l');
-	uart_putc('d');
-	uart_putc('!');
-	uart_putc('\r');
-	uart_putc('\n');
+	print_str("\r\nHello World!\r\n");
 
 	blink();
-}
-
-
-void uart_putc(char c)
-{
-	/* Wait until UART ready */
-	while ( regRead32(UART0_FR) & (1 << 5));
-	/* Write character */
-	regWrite32(UART0_DR, c);
 }
 
 
@@ -73,18 +47,4 @@ void blink(void)
 	}
 }
 
-/* TODO */
-void print_str(char * str)
-{
-	if (0 == str)
-	{
-		return;
-	}
-
-	while (*str != '\0')
-	{
-		uart_putc(*str);
-		str++;
-	}
-}
 

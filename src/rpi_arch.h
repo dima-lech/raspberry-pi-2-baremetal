@@ -1,3 +1,6 @@
+#ifndef     __RPI_ARCH_H
+#define     __RPI_ARCH_H
+
 #include <stdint.h>
 
 #define GPFSEL4		0x3F200010
@@ -42,5 +45,7 @@ enum
 
 
 void delay(uint32_t val);
+void uart_putc(char c);
 
 
+#endif    /* __RPI_ARCH_H */
