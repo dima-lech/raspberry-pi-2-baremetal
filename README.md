@@ -23,7 +23,7 @@ sudo apt install qemu-system-arm
 `make qemu` can be used to build and run the image. Use *ctrl+a*, *x* to quit QEMU.
 
 
-## SD Card
+## RPi Hardware
 
 An SD card is required to run on actual hardware, and its first partition has to be FAT32 (this is created by default using the [Raspberry Pi Imager](https://www.raspberrypi.com/software)).
 
