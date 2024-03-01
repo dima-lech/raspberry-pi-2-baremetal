@@ -2,14 +2,16 @@ default: all
 
 IMAGE_NAME = baremetal
 CROSS_COMPILE=arm-none-eabi-
-CFLAGS = -mcpu=cortex-a7 -fpic -ffreestanding -nostdlib -fno-builtin -Wall -Wextra -g -O0
+CFLAGS = -mcpu=cortex-a7 -fpic -ffreestanding -nostdlib -fno-builtin -Wall -Wextra -g -O0 -MMD
 OBJS = boot.o baremetal.o rpi_arch.o utils.o
 
 OBJS_FILES = $(addprefix obj/,$(OBJS))
+DEPS_FILES = $(OBJS_FILES:%.o=%.d)
 IMAGE_BIN_FILE = out/$(IMAGE_NAME).bin
 IMAGE_ELF_FILE = out/$(IMAGE_NAME).elf
 OBJDUMP_FILE = tmp/objdump.txt
 READELF_FILE = tmp/readelf.txt
+
 
 vpath %.c src
 vpath %.s src
@@ -20,6 +22,10 @@ sd: all
 qemu: all 
 	chmod +x qemu/run-qemu.sh
 	qemu/run-qemu.sh
+
+clean:
+	rm -f obj/* out/* tmp/*
+	rm -f sd/$(IMAGE_NAME).bin
 
 obj/:
 	mkdir -p obj
@@ -46,12 +52,14 @@ $(OBJDUMP_FILE): $(IMAGE_ELF_FILE)
 $(READELF_FILE): $(IMAGE_ELF_FILE)
 	$(CROSS_COMPILE)readelf -a $< > $@
 
+
+# Include all .d files
+-include $(DEPS_FILES)
+
 obj/%.o: %.s
 	$(CROSS_COMPILE)gcc $(CFLAGS) -c $< -o $@
 
 obj/%.o: %.c
 	$(CROSS_COMPILE)gcc $(CFLAGS) -c $< -o $@
 
-clean:
-	rm -f obj/* out/* tmp/*
-	rm -f sd/$(IMAGE_NAME).bin
+
