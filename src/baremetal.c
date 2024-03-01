@@ -1,16 +1,19 @@
 #include <stdint.h>
 
-#define GPFSEL4 0x3F200010
-#define GPSET1 0x3F200020
-#define GPCLR1 0x3F20002C
+#define GPFSEL4		0x3F200010
+#define GPSET1		0x3F200020
+#define GPCLR1		0x3F20002C
 
-#define UARTDR	0x3F201000
+#define UARTDR		0x3F201000
 
 extern void do_nothing();
 void blink(void);
 void uart_putc(char c);
 
 
+/**
+*	C entry point
+*/
 void entry_c(void)
 {
 	blink();
@@ -34,6 +37,7 @@ void blink(void)
 
 		for (uint32_t i = 0; i < 0x100000; i++)
 		{
+			/* delay */
 			do_nothing();
     	}
 
@@ -41,9 +45,11 @@ void blink(void)
 
 		for (uint32_t i = 0; i < 0x100000; i++)
 		{
+			/* delay */
 			do_nothing();
 		}
 
+		/* Print '.' character to UART */
 		uart_putc('.');
 	}
 }

@@ -39,7 +39,10 @@ Note that since first 4 steps involve running on the GPU (VPU / VideoCore IV), t
 `make sd` can be used to copy required files to *sd* directory.
 
 
+## Resources
 
+- [Raspberry Pi - Firmware files](https://github.com/raspberrypi/firmware)
+- [Raspberry Pi forums - boot sequence explanation](https://raspberrypi.stackexchange.com/questions/10442/what-is-the-boot-sequence)
 
 
 
