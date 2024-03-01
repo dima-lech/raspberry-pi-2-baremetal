@@ -3,6 +3,19 @@
 
 #include <stdint.h>
 
+/**
+ * Peripherals addresses in documentation are referred to using
+ * "bus" addresses, which are used by the GPU side (VPU/VC4).
+ * Thus peripheral addresses have to be translated to Arm physical
+ * region, which starts at 0x20200000 for RPi 1 and 0x3F000000
+ * for RPi 2 & 3.
+ **/
+#define PERIPH_BUS_BASE_ADDR    0x7E000000
+#define PERIPH_ARM_BASE_ADDR    0x3F000000      /* For RPi 2 & 3 */
+#define PERIPH_BUS_TO_ARM_ADDR(addr)    \
+   ((addr) - (PERIPH_BUS_BASE_ADDR) +   \
+                (PERIPH_ARM_BASE_ADDR))
+
 
 #define regRead32(addr)         (*(volatile uint32_t*)(addr))
 #define regWrite32(addr, val)   (*(volatile uint32_t*)(addr) = (val))
@@ -11,8 +24,7 @@ enum
 {
     /* The GPIO registers base address */
     /* Bus address: 0x7E200000 */
-    GPIO_BASE = 0x3F200000, /* for raspi2 & 3, 0x20200000 for raspi1 */
-
+    GPIO_BASE = PERIPH_BUS_TO_ARM_ADDR(0x7E200000),
     GPFSEL4     = (GPIO_BASE + 0x10),
     GPSET1      = (GPIO_BASE + 0x20),
     GPCLR1      = (GPIO_BASE + 0x2C),
@@ -21,8 +33,7 @@ enum
 
     /* The base address for UART */
     /* Bus address: 0x7E201000 */
-    UART0_BASE = 0x3F201000, /* for raspi2 & 3, 0x20201000 for raspi1 */
-
+    UART0_BASE = PERIPH_BUS_TO_ARM_ADDR(0x7E201000),
     UART0_DR     = (UART0_BASE + 0x00),
     UART0_RSRECR = (UART0_BASE + 0x04),
     UART0_FR     = (UART0_BASE + 0x18),
