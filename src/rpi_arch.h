@@ -3,23 +3,24 @@
 
 #include <stdint.h>
 
-#define GPFSEL4		0x3F200010
-#define GPSET1		0x3F200020
-#define GPCLR1		0x3F20002C
-
 
 #define regRead32(addr)         (*(volatile uint32_t*)(addr))
 #define regWrite32(addr, val)   (*(volatile uint32_t*)(addr) = (val))
 
 enum
 {
-    /* The GPIO registers base address. */
+    /* The GPIO registers base address */
+    /* Bus address: 0x7E200000 */
     GPIO_BASE = 0x3F200000, /* for raspi2 & 3, 0x20200000 for raspi1 */
 
-    GPPUD = (GPIO_BASE + 0x94),
-    GPPUDCLK0 = (GPIO_BASE + 0x98),
+    GPFSEL4     = (GPIO_BASE + 0x10),
+    GPSET1      = (GPIO_BASE + 0x20),
+    GPCLR1      = (GPIO_BASE + 0x2C),
+    GPPUD       = (GPIO_BASE + 0x94),
+    GPPUDCLK0   = (GPIO_BASE + 0x98),
 
     /* The base address for UART */
+    /* Bus address: 0x7E201000 */
     UART0_BASE = 0x3F201000, /* for raspi2 & 3, 0x20201000 for raspi1 */
 
     UART0_DR     = (UART0_BASE + 0x00),
