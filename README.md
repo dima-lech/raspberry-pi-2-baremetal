@@ -1,7 +1,16 @@
 # raspberry-pi-2-baremetal
 
-This repository contains environment for building a bare-metal executable which runs on Raspberry Pi 2 B ARM core.
+This repository contains environment for building a bare-metal executable which runs on Raspberry Pi 2 B Arm core.
 Execution can be emulated using QEMU.
+
+## Build
+
+Install Arm cross-compiler:
+```
+sudo apt install gcc-arm-none-eabi
+```
+Image is built using `make all`.
+
 
 ## QEMU
 
@@ -11,7 +20,7 @@ sudo apt install qemu-system-arm
 ```
 
 *qemu* directory contains necessary files to run output image on QEMU.
-`make qemu` can be used to build and run on QEMU. use *ctrl+a*, *x* to quit QEMU.
+`make qemu` can be used to build and run the image. Use *ctrl+a*, *x* to quit QEMU.
 
 
 ## SD Card
@@ -21,9 +30,11 @@ An SD card is required to run on actual hardware, and its first partition has to
 At a minimum, the FAT32 partition has to include these files:
 - **bootcode.bin** - first executed software
 - **fixup.dat** - required for RAM initialization
-- **start.elf** - reads *config.txt* (if present) and executes the kernel (*kernel7.img* by default)
+- **start.elf** - reads *config.txt* (if present) and executes the *kernel* (*kernel7.img* by default)
 - **config.txt** - optional, includes configuration parameters for startup
 - ***kernel image***
+
+Note that since first 4 steps involve running on the GPU (VPU / VideoCore IV), this sequence cannot be easily modified. The built ***kernel*** image is the first software to execute on the Arm core and so it is the starting point for out bare-metal image, which replaces the default kernel.
 
 `make sd` can be used to copy required files to *sd* directory.
 
