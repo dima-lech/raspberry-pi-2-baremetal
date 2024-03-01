@@ -15,7 +15,22 @@ void print_str(char * str);
 */
 void entry_c(void)
 {
-	/* print_str("\r\nHello World!\r\n\r\n"); */
+	uart_putc('\r');
+	uart_putc('\n');
+	uart_putc('H');
+	uart_putc('e');
+	uart_putc('l');
+	uart_putc('l');
+	uart_putc('o');
+	uart_putc(' ');
+	uart_putc('W');
+	uart_putc('o');
+	uart_putc('r');
+	uart_putc('l');
+	uart_putc('d');
+	uart_putc('!');
+	uart_putc('\r');
+	uart_putc('\n');
 
 	blink();
 }
@@ -58,7 +73,7 @@ void blink(void)
 	}
 }
 
-
+/* TODO */
 void print_str(char * str)
 {
 	if (0 == str)
