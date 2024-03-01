@@ -2,7 +2,7 @@
 #include "rpi_arch.h"
 #include "utils.h"
 
-void print_str(const char * str)
+void printStr(const char * str)
 {
 	if (0 == str)
 	{
@@ -11,31 +11,59 @@ void print_str(const char * str)
 
 	while (*str != '\0')
 	{
-		uart_putc(*str);
+		uartPutC(*str);
 		str++;
 	}
 }
 
 
-void print_val32_hex(uint32_t val)
+void printVal32Hex(uint32_t val)
 {
 	uint32_t i;
 	char c;
 
-	uart_putc('0');
-	uart_putc('x');
+	uartPutC('0');
+	uartPutC('x');
 	for (i = 0; i < 8; i++)
 	{
 		c = (val & 0xf0000000) >> 28;
 		if (c <= 9)
 		{
-			uart_putc('0' + c);
+			uartPutC('0' + c);
 		}
 		else
 		{
-			uart_putc('A' + (c - 0xa));
+			uartPutC('A' + (c - 0xa));
 		}
 		val = val << 4;
+	}
+}
+
+
+void printVal64Hex(uint64_t val)
+{
+	uint32_t i;
+	char c;
+
+	uartPutC('0');
+	uartPutC('x');
+	for (i = 0; i < 16; i++)
+	{
+		c = (val & 0xf000000000000000llu) >> 60;
+		if (c <= 9)
+		{
+			uartPutC('0' + c);
+		}
+		else
+		{
+			uartPutC('A' + (c - 0xa));
+		}
+		val = val << 4;
+
+		if (i == 7)
+		{
+			uartPutC('_');
+		}
 	}
 }
 

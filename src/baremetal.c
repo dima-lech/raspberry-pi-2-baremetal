@@ -3,6 +3,8 @@
 #include "utils.h"
 
 
+#define TIMER_PRINT_LOOPS		200
+
 
 void blink(void);
 
@@ -11,9 +13,9 @@ void blink(void);
 /**
 *	C entry point
 */
-void entry_c(void)
+void entryC(void)
 {
-	print_str("\r\nHello World!\r\n");
+	printStr("\r\nHello World!\r\n\r\n");
 
 	blink();
 }
@@ -22,6 +24,9 @@ void entry_c(void)
 void blink(void)
 {
 	uint32_t regVal32;
+	uint32_t i = 0;
+	uint64_t prevSysTime = 0;
+	uint64_t currSysTime = 0;
 
 	regVal32 = regRead32(GPFSEL4);
 	regVal32 &= ~(7 << 21);
@@ -42,8 +47,22 @@ void blink(void)
 		/* delay */
 		delay(1000000);
 
-		/* Print '.' character to UART */
-		uart_putc('.');
+		if ((i % TIMER_PRINT_LOOPS) == 0)
+		{
+			currSysTime = sysTimerGet();
+			printStr("System timer = ");
+			printVal64Hex(currSysTime);
+			if (i > 0)
+			{
+				printStr("\t(delta ");
+				printVal32Hex(currSysTime - prevSysTime);
+				printStr(")");
+			}
+			printStr("\n");
+			prevSysTime = currSysTime;
+		}
+
+		i++;
 	}
 }
 

@@ -23,7 +23,7 @@ _start:
     blo 1b
 
     /* Jump to C entry function */
-    bl entry_c
+    bl entryC
 
 
     /* Should not reach here! */

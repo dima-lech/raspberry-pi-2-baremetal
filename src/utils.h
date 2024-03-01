@@ -3,8 +3,9 @@
 
 
 
-void print_str(const char * str);
-void print_val32_hex(uint32_t val);
+void printStr(const char * str);
+void printVal32Hex(uint32_t val);
+void printVal64Hex(uint64_t val);
 
 
 
