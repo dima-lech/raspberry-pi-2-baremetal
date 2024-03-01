@@ -33,7 +33,6 @@ void uart_putc(char c)
 void blink(void)
 {
 	uint32_t regVal32;
-	uint32_t i;
 
 	regVal32 = regRead32(GPFSEL4);
 	regVal32 &= ~(7 << 21);
