@@ -1,0 +1,5 @@
+# Output debug information from 'bootcode.bin' and 'start.elf'
+uart_2ndstage=1
+# Configure which file should be loaded by 'start.elf'
+kernel=baremetal.bin
+
