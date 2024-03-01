@@ -3,7 +3,7 @@ default: all
 IMAGE_NAME = baremetal
 CROSS_COMPILE=arm-none-eabi-
 CFLAGS = -mcpu=cortex-a7 -ffreestanding -nostdlib -fno-builtin -Wall -Wextra
-OBJS = obj/boot.o obj/baremetal.o
+OBJS = obj/boot.o obj/baremetal.o obj/rpi_arch.o
 
 vpath %.c src
 vpath %.s src

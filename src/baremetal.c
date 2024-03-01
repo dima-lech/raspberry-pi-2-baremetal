@@ -1,14 +1,13 @@
 #include <stdint.h>
+#include "rpi_arch.h"
 
-#define GPFSEL4		0x3F200010
-#define GPSET1		0x3F200020
-#define GPCLR1		0x3F20002C
 
-#define UARTDR		0x3F201000
 
 extern void do_nothing();
 void blink(void);
 void uart_putc(char c);
+void print_str(char * str);
+
 
 
 /**
@@ -16,40 +15,62 @@ void uart_putc(char c);
 */
 void entry_c(void)
 {
+	/* print_str("\r\nHello World!\r\n\r\n"); */
+
 	blink();
 }
 
 
 void uart_putc(char c)
 {
-	*(unsigned int *)UARTDR = c;
+	/* Wait until UART ready */
+	while ( regRead32(UART0_FR) & (1 << 5));
+	/* Write character */
+	regWrite32(UART0_DR, c);
 }
 
 
 void blink(void)
 {
-	*(volatile uint32_t *)GPFSEL4 &= ~(7 << 21);
-	*(volatile uint32_t *)GPFSEL4 |= 1 << 21;
+	uint32_t regVal32;
+	uint32_t i;
+
+	regVal32 = regRead32(GPFSEL4);
+	regVal32 &= ~(7 << 21);
+	regVal32 |= 1 << 21;
+	regWrite32(GPFSEL4, regVal32);
 
 	while (1)
 	{
-		*(volatile uint32_t *)GPSET1 = 1 << (47 - 32);
+		/* Set bit */
+		regWrite32(GPSET1, 1 << (47 - 32));
 
-		for (uint32_t i = 0; i < 0x100000; i++)
-		{
-			/* delay */
-			do_nothing();
-    	}
+		/* delay */
+		delay(1000000);
 
-		*(volatile uint32_t *)GPCLR1 = 1 << (47 - 32);
+    	/* Clear bit */
+    	regWrite32(GPCLR1, 1 << (47 - 32));
 
-		for (uint32_t i = 0; i < 0x100000; i++)
-		{
-			/* delay */
-			do_nothing();
-		}
+		/* delay */
+		delay(1000000);
 
 		/* Print '.' character to UART */
 		uart_putc('.');
 	}
 }
+
+
+void print_str(char * str)
+{
+	if (0 == str)
+	{
+		return;
+	}
+
+	while (*str != '\0')
+	{
+		uart_putc(*str);
+		str++;
+	}
+}
+
