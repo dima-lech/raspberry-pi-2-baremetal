@@ -34,7 +34,7 @@ At a minimum, the FAT32 partition has to include these files:
 - **config.txt** - optional, includes configuration parameters for startup
 - ***kernel image***
 
-Note that since first 4 steps involve running on the GPU (VPU / VideoCore IV), this sequence cannot be easily modified. The built ***kernel*** image is the first software to execute on the Arm core and so it is the starting point for out bare-metal image, which replaces the default kernel.
+Note that since first 4 steps involve running on the GPU (VPU / VideoCore IV), this sequence cannot be easily modified. The built ***kernel image*** is the first software to execute on the Arm core and so it is the starting point for out bare-metal image, which replaces the default kernel.
 
 `make sd` can be used to copy required files to *sd* directory.
 
