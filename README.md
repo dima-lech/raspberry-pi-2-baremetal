@@ -41,8 +41,15 @@ Note that since first 4 steps involve running on the GPU (VPU / VideoCore IV), t
 
 ## Resources
 
+### RPi Resources
+
 - [Raspberry Pi - Firmware files](https://github.com/raspberrypi/firmware)
 - [Raspberry Pi forums - boot sequence explanation](https://raspberrypi.stackexchange.com/questions/10442/what-is-the-boot-sequence)
 
+### Additional Resources
 
+- https://jsandler18.github.io
+- https://github.com/s-matyukevich/raspberry-pi-os
+- https://www.rpi4os.com/part1-bootstrapping
+- https://wiki.osdev.org/Raspberry_Pi_Bare_Bones
 
