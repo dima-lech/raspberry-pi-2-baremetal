@@ -21,7 +21,10 @@ obj/:
 out/:
 	mkdir -p out
 
-all: obj/ out/ out/$(IMAGE_NAME).bin
+tmp/:
+	mkdir -p tmp
+
+all: obj/ out/ tmp/ out/$(IMAGE_NAME).bin tmp/objdump.txt tmp/readelf.txt
 	ls -l out/
 
 out/$(IMAGE_NAME).bin: out/$(IMAGE_NAME).elf
@@ -30,6 +33,12 @@ out/$(IMAGE_NAME).bin: out/$(IMAGE_NAME).elf
 out/$(IMAGE_NAME).elf: $(OBJS)
 	$(CROSS_COMPILE)gcc $(CFLAGS) -T src/linker.ld -o $@ $^
 
+tmp/objdump.txt: out/$(IMAGE_NAME).elf
+	$(CROSS_COMPILE)objdump -S $< > $@
+
+tmp/readelf.txt: out/$(IMAGE_NAME).elf
+	$(CROSS_COMPILE)readelf -a $< > $@
+
 obj/%.o: %.s
 	$(CROSS_COMPILE)gcc $(CFLAGS) -c $< -o $@
 
@@ -37,5 +46,5 @@ obj/%.o: %.c
 	$(CROSS_COMPILE)gcc $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f obj/* out/*
+	rm -f obj/* out/* tmp/*
 	rm -f sd/$(IMAGE_NAME).bin
