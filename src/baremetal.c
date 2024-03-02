@@ -3,8 +3,6 @@
 #include "utils.h"
 
 
-#define TIMER_PRINT_LOOPS		200
-
 
 void blink(void);
 
@@ -39,28 +37,25 @@ void blink(void)
 		regWrite32(GPSET1, 1 << (47 - 32));
 
 		/* delay */
-		delay(1000000);
+		sysTimerDelay(1000000);
 
     	/* Clear bit */
     	regWrite32(GPCLR1, 1 << (47 - 32));
 
 		/* delay */
-		delay(1000000);
+		sysTimerDelay(1000000);
 
-		if ((i % TIMER_PRINT_LOOPS) == 0)
+		currSysTime = sysTimerGet();
+		printStr("System timer = ");
+		printVal64Hex(currSysTime);
+		if (i > 0)
 		{
-			currSysTime = sysTimerGet();
-			printStr("System timer = ");
-			printVal64Hex(currSysTime);
-			if (i > 0)
-			{
-				printStr("\t(delta ");
-				printVal32Hex(currSysTime - prevSysTime);
-				printStr(")");
-			}
-			printStr("\n");
-			prevSysTime = currSysTime;
+			printStr("\t(delta ");
+			printVal32Hex(currSysTime - prevSysTime);
+			printStr(")");
 		}
+		printStr("\n");
+		prevSysTime = currSysTime;
 
 		i++;
 	}

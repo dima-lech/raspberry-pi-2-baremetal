@@ -2,12 +2,19 @@
 #include "rpi_arch.h"
 
 
-void delay(uint32_t val)
+
+void sysTimerDelay(uint32_t delayVal)
 {
-	while (val > 0)
+	uint64_t startVal;
+	uint64_t currVal;
+
+	startVal = sysTimerGet();
+
+	/* Wait for specified duration */
+	do
 	{
-		val--;
-	}
+		currVal = sysTimerGet();
+	} while ((currVal - startVal) < ((uint64_t)delayVal));
 }
 
 

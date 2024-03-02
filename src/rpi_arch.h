@@ -63,6 +63,7 @@ void delay(uint32_t val);
 void uartPutC(char c);
 void sys(char c);
 uint64_t sysTimerGet(void);
+void sysTimerDelay(uint32_t delayVal);
 
 
 #endif    /* __RPI_ARCH_H */
