@@ -55,4 +55,5 @@ Note that since first 4 steps involve running on the GPU (VPU / VideoCore IV), t
 - https://github.com/s-matyukevich/raspberry-pi-os
 - https://www.rpi4os.com/part1-bootstrapping
 - https://wiki.osdev.org/Raspberry_Pi_Bare_Bones
+- https://williamdurand.fr/2021/01/23/bare-metal-raspberry-pi-2-programming
 
