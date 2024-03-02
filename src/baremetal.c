@@ -36,7 +36,7 @@ void blink(uint32_t freq)
 	regWrite32(GPFSEL4, regVal32);
 
 	printStr("Start blink @ freq ");
-	printValHex(freq, 0, "0x", "\r\n\r\n");
+	printValDec(freq, "", "\r\n\r\n");
 
 	while (1)
 	{
@@ -58,7 +58,7 @@ void blink(uint32_t freq)
 		if (i > 0)
 		{
 			printStr("\t(delta ");
-			printValHex(currSysTime - prevSysTime, 8, "0x", "");
+			printValDec((uint32_t)(currSysTime - prevSysTime), "", "");
 			printStr(")");
 		}
 		printStr("\r\n");
