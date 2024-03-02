@@ -35,8 +35,8 @@ void blink(uint32_t freq)
 	regVal32 |= 1 << 21;
 	regWrite32(GPFSEL4, regVal32);
 
-	printStr("Start blink @ freq ");
-	printValDec(freq, "", "\r\n\r\n");
+	printStr("Start blink @ ");
+	printValDec(freq, "", " Hz\r\n\r\n");
 
 	while (1)
 	{
