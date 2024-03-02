@@ -2,6 +2,12 @@
 #include "rpi_arch.h"
 #include "utils.h"
 
+
+#define STR_BUFF_SIZE	18
+
+static char strBuff[STR_BUFF_SIZE];
+
+
 void printStr(const char * str)
 {
 	if (0 == str)
@@ -17,54 +23,55 @@ void printStr(const char * str)
 }
 
 
-void printVal32Hex(uint32_t val)
+char hexToChar(uint8_t val8)
 {
-	uint32_t i;
-	char c;
-
-	uartPutC('0');
-	uartPutC('x');
-	for (i = 0; i < 8; i++)
+	if (val8 <= 9)
 	{
-		c = (val & 0xf0000000) >> 28;
-		if (c <= 9)
-		{
-			uartPutC('0' + c);
-		}
-		else
-		{
-			uartPutC('A' + (c - 0xa));
-		}
-		val = val << 4;
+		return ('0' + val8);
+	}
+	else
+	{
+		return('A' + (val8 - 0xa));
 	}
 }
 
 
-void printVal64Hex(uint64_t val)
+void printValHex(uint64_t val, uint32_t padNum, char * prefix, char * suffix)
 {
-	uint32_t i;
-	char c;
+	int32_t i;
+	uint32_t printChars = 0;
 
-	uartPutC('0');
-	uartPutC('x');
-	for (i = 0; i < 16; i++)
+	strBuff[STR_BUFF_SIZE - 1] = '\0';
+
+	for(i = STR_BUFF_SIZE - 2; (i >= 0) && (val > 0); i--)
 	{
-		c = (val & 0xf000000000000000llu) >> 60;
-		if (c <= 9)
+		if (8 == printChars)
 		{
-			uartPutC('0' + c);
+			strBuff[i--] = '_';
+			printChars++;
 		}
-		else
-		{
-			uartPutC('A' + (c - 0xa));
-		}
-		val = val << 4;
 
-		if (i == 7)
-		{
-			uartPutC('_');
-		}
+		strBuff[i] = hexToChar((uint8_t)(val & 0xf));
+		val = val >> 4;
+		printChars++;
 	}
+
+	while ((printChars < padNum) && (i >= 0))
+	{
+		if (8 == printChars)
+		{
+			strBuff[i--] = '_';
+			printChars++;
+		}
+
+		strBuff[i] = '0';
+		printChars++;
+		i--;
+	}
+
+	printStr(prefix);
+	printStr(&strBuff[i + 1]);
+	printStr(suffix);
 }
 
 

@@ -47,11 +47,11 @@ void blink(void)
 
 		currSysTime = sysTimerGet();
 		printStr("System timer = ");
-		printVal64Hex(currSysTime);
+		printValHex(currSysTime, 16, "0x", "");
 		if (i > 0)
 		{
 			printStr("\t(delta ");
-			printVal32Hex(currSysTime - prevSysTime);
+			printValHex(currSysTime - prevSysTime, 8, "0x", "");
 			printStr(")");
 		}
 		printStr("\n");

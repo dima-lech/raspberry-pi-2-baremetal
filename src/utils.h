@@ -4,9 +4,7 @@
 
 
 void printStr(const char * str);
-void printVal32Hex(uint32_t val);
-void printVal64Hex(uint64_t val);
-
+void printValHex(uint64_t val, uint32_t padNum, char * prefix, char * suffix);
 
 
 #endif    /* __UTILS_H */
