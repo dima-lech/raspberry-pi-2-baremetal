@@ -44,7 +44,7 @@ $(IMAGE_BIN_FILE): $(IMAGE_ELF_FILE)
 	$(CROSS_COMPILE)objcopy $< -O binary $@
 
 $(IMAGE_ELF_FILE): $(OBJS_FILES)
-	$(CROSS_COMPILE)gcc $(CFLAGS) -T src/linker.ld -o $@ $^
+	$(CROSS_COMPILE)ld -T src/linker.ld -o $@ $^
 
 $(OBJDUMP_FILE): $(IMAGE_ELF_FILE)
 	$(CROSS_COMPILE)objdump -Sx $< > $@
