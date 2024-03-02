@@ -3,8 +3,10 @@
 #include "utils.h"
 
 
+#define BLINK_FREQ		1000000		/* 1 sec (?) */
 
-void blink(void);
+
+void blink(uint32_t freq);
 
 
 
@@ -13,13 +15,15 @@ void blink(void);
 */
 void entryC(void)
 {
-	printStr("\r\nHello World!\r\n\r\n");
+	printStr("\r\n============");
+	printStr("\r\nHello World!");
+	printStr("\r\n============\r\n\r\n");
 
-	blink();
+	blink(BLINK_FREQ);
 }
 
 
-void blink(void)
+void blink(uint32_t freq)
 {
 	uint32_t regVal32;
 	uint32_t i = 0;
@@ -31,19 +35,22 @@ void blink(void)
 	regVal32 |= 1 << 21;
 	regWrite32(GPFSEL4, regVal32);
 
+	printStr("Start blink @ freq ");
+	printValHex(freq, 0, "0x", "\r\n\r\n");
+
 	while (1)
 	{
 		/* Set bit */
 		regWrite32(GPSET1, 1 << (47 - 32));
 
 		/* delay */
-		sysTimerDelay(1000000);
+		sysTimerDelay(freq);
 
     	/* Clear bit */
     	regWrite32(GPCLR1, 1 << (47 - 32));
 
 		/* delay */
-		sysTimerDelay(1000000);
+		sysTimerDelay(freq);
 
 		currSysTime = sysTimerGet();
 		printStr("System timer = ");
@@ -54,7 +61,7 @@ void blink(void)
 			printValHex(currSysTime - prevSysTime, 8, "0x", "");
 			printStr(")");
 		}
-		printStr("\n");
+		printStr("\r\n");
 		prevSysTime = currSysTime;
 
 		i++;
