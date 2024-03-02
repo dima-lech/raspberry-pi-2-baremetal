@@ -4,6 +4,8 @@ IMAGE_NAME = baremetal
 CROSS_COMPILE=arm-none-eabi-
 CFLAGS = -mcpu=cortex-a7 -fpic -ffreestanding -nostdlib -fno-builtin -Wall -Wextra -g -O0 -MMD
 OBJS = boot.o baremetal.o rpi_arch.o utils.o
+LINKER_FILE = src/linker.ld
+QEMU_SCRIPT = qemu/run-qemu.sh
 
 OBJS_FILES = $(addprefix obj/,$(OBJS))
 DEPS_FILES = $(OBJS_FILES:%.o=%.d)
@@ -12,6 +14,11 @@ IMAGE_ELF_FILE = out/$(IMAGE_NAME).elf
 OBJDUMP_FILE = tmp/objdump.txt
 READELF_FILE = tmp/readelf.txt
 
+GCC=$(CROSS_COMPILE)gcc
+LD=$(CROSS_COMPILE)ld
+OBJCOPY=$(CROSS_COMPILE)objcopy
+OBJDUMP=$(CROSS_COMPILE)objdump
+READELF=$(CROSS_COMPILE)readelf
 
 vpath %.c src
 vpath %.s src
@@ -20,8 +27,8 @@ sd: all
 	cp $(IMAGE_BIN_FILE) sd/
 
 qemu: all 
-	chmod +x qemu/run-qemu.sh
-	qemu/run-qemu.sh
+	chmod +x $(QEMU_SCRIPT)
+	$(QEMU_SCRIPT)
 
 clean:
 	rm -f obj/* out/* tmp/*
@@ -41,25 +48,25 @@ all: obj/ out/ tmp/ $(IMAGE_BIN_FILE) $(OBJDUMP_FILE) $(READELF_FILE)
 	@ls -l out/*$(IMAGE_NAME)*
 
 $(IMAGE_BIN_FILE): $(IMAGE_ELF_FILE)
-	$(CROSS_COMPILE)objcopy $< -O binary $@
+	$(OBJCOPY) $< -O binary $@
 
 $(IMAGE_ELF_FILE): $(OBJS_FILES)
-	$(CROSS_COMPILE)ld -T src/linker.ld -o $@ $^
+	$(LD) -T $(LINKER_FILE) -o $@ $^
 
 $(OBJDUMP_FILE): $(IMAGE_ELF_FILE)
-	$(CROSS_COMPILE)objdump -Sx $< > $@
+	$(OBJDUMP) -Sx $< > $@
 
 $(READELF_FILE): $(IMAGE_ELF_FILE)
-	$(CROSS_COMPILE)readelf -a $< > $@
+	$(READELF) -a $< > $@
 
 
 # Include all .d files
 -include $(DEPS_FILES)
 
 obj/%.o: %.s
-	$(CROSS_COMPILE)gcc $(CFLAGS) -c $< -o $@
+	$(GCC) $(CFLAGS) -c $< -o $@
 
 obj/%.o: %.c
-	$(CROSS_COMPILE)gcc $(CFLAGS) -c $< -o $@
+	$(GCC) $(CFLAGS) -c $< -o $@
 
 
