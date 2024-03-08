@@ -3,7 +3,7 @@
 #include "utils.h"
 
 
-#define BLINK_FREQ		1000000		/* 1 sec (?) */
+#define BLINK_FREQ		1000000		/* 1 sec */
 
 
 void blink(uint32_t freq);
@@ -25,7 +25,6 @@ void entryC(void)
 
 void blink(uint32_t freq)
 {
-	/*uint32_t regVal32;*/
 	uint32_t i = 0;
 	uint64_t prevSysTime = 0;
 	uint64_t currSysTime = 0;
