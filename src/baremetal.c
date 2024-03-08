@@ -30,6 +30,10 @@ void blink(uint32_t freq)
 	uint64_t prevSysTime = 0;
 	uint64_t currSysTime = 0;
 
+	/**
+	 * Set GPIO 47 as output:
+	 * GPFSEL4[FSEL47][23:21] = 001
+	 */
 	regVal32 = regRead32(GPFSEL4);
 	regVal32 &= ~(7 << 21);
 	regVal32 |= 1 << 21;
@@ -40,13 +44,13 @@ void blink(uint32_t freq)
 
 	while (1)
 	{
-		/* Set bit */
+		/* Set GPIO 47: GPSET1[SET47][47-32] = 1 */
 		regWrite32(GPSET1, 1 << (47 - 32));
 
 		/* delay */
 		sysTimerDelay(freq);
 
-    	/* Clear bit */
+    	/* Clear GPIO 47: GPCLR1[CLR47][47-32] = 1 */
     	regWrite32(GPCLR1, 1 << (47 - 32));
 
 		/* delay */

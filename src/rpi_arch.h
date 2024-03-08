@@ -29,8 +29,15 @@ enum
 
     /* GPIO             0x7E200000  */
     GPIO_BASE       = PERIPH_BUS_TO_ARM_ADDR(0x7E200000),
+    GPFSEL0         = (GPIO_BASE + 0x00),
+    GPFSEL1         = (GPIO_BASE + 0x04),
+    GPFSEL2         = (GPIO_BASE + 0x08),
+    GPFSEL3         = (GPIO_BASE + 0x0C),
     GPFSEL4         = (GPIO_BASE + 0x10),
+    GPFSEL5         = (GPIO_BASE + 0x14),
+    GPSET0          = (GPIO_BASE + 0x1C),
     GPSET1          = (GPIO_BASE + 0x20),
+    GPCLR0          = (GPIO_BASE + 0x28),
     GPCLR1          = (GPIO_BASE + 0x2C),
     GPPUD           = (GPIO_BASE + 0x94),
     GPPUDCLK0       = (GPIO_BASE + 0x98),

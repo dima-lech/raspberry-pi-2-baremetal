@@ -27,7 +27,7 @@ sd: all
 	cp $(IMAGE_BIN_FILE) sd/
 
 qemu: all 
-	chmod +x $(QEMU_SCRIPT)
+	@chmod +x $(QEMU_SCRIPT)
 	$(QEMU_SCRIPT)
 
 clean:
@@ -35,13 +35,13 @@ clean:
 	rm -f sd/$(IMAGE_NAME).bin
 
 obj/:
-	mkdir -p obj
+	@mkdir -p obj
 
 out/:
-	mkdir -p out
+	@mkdir -p out
 
 tmp/:
-	mkdir -p tmp
+	@mkdir -p tmp
 
 all: obj/ out/ tmp/ $(IMAGE_BIN_FILE) $(OBJDUMP_FILE) $(READELF_FILE)
 	@echo -n "\n"
