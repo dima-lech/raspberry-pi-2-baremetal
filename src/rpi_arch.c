@@ -37,6 +37,15 @@ void uartPutC(char c)
 }
 
 
+char uartGetC(void)
+{
+	/* Wait until UART ready */
+	while (regRead32(UART0_FR) & (1 << 4));
+	/* Write character */
+	return (char)(regRead32(UART0_DR) & 0xff);
+}
+
+
 uint64_t sysTimerGet(void)
 {
 	uint32_t lo;

@@ -1,13 +1,15 @@
 #include <stdint.h>
 #include "rpi_arch.h"
 #include "utils.h"
+#include "dlsh.h"
 
+
+#undef	DLSH_ENABLE
 
 #define BLINK_FREQ		1000000		/* 1 sec */
 
 
 void blink(uint32_t freq);
-
 
 
 /**
@@ -18,6 +20,10 @@ void entryC(void)
 	printStr("\r\n============");
 	printStr("\r\nHello World!");
 	printStr("\r\n============\r\n\r\n");
+
+#ifdef	DLSH_ENABLE
+	dlshStart(printStr, uartGetC, 1);
+#endif
 
 	blink(BLINK_FREQ);
 }
