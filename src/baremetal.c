@@ -43,7 +43,7 @@ void blink(uint32_t freq)
 		/* Delay */
 		sysTimerDelay(freq);
 
-    	/* Clear GPIO 47 */
+		/* Clear GPIO 47 */
 		gpioValSet(47, GPIO_VAL_OFF);
 
 		/* Delay */
