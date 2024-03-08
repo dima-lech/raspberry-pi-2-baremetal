@@ -10,6 +10,7 @@
 
 
 void blink(uint32_t freq);
+void blinkWrapper(int argc, char * argv[]);
 
 
 /**
@@ -22,9 +23,16 @@ void entryC(void)
 	printStr("\r\n============\r\n\r\n");
 
 #ifdef	DLSH_ENABLE
+	dlshRegisterCommand("blink", blinkWrapper);
 	dlshStart(printStr, uartGetC, 1);
 #endif
 
+	blink(BLINK_FREQ);
+}
+
+
+void blinkWrapper(__attribute__((unused)) int argc, __attribute__((unused)) char * argv[])
+{
 	blink(BLINK_FREQ);
 }
 
