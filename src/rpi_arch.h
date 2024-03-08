@@ -20,6 +20,14 @@
 #define regRead32(addr)         (*(volatile uint32_t*)(addr))
 #define regWrite32(addr, val)   (*(volatile uint32_t*)(addr) = (val))
 
+
+#define GPIO_NUM                 54    /* GPIO 0 - GPIO 54 */
+#define GPIO_FSEL_FIELD_NUM      10    /* 10 GPIO fields in FSELn register */
+#define GPIO_FSEL_FIELD_SIZE     3
+#define GPIO_FSEL_FIELD_MASK     0x7
+#define GPIO_CLR_SET_FIELD_NUM   32    /* 32 GPIO fields in CLRn/SETn registers */
+
+
 enum
 {
     /* System Timer     0x7E003000  */
@@ -65,12 +73,36 @@ enum
 };
 
 
+typedef enum
+{
+   GPIO_FSEL_INPUT      = 0x0,
+   GPIO_FSEL_OUTPUT     = 0x1,
+   GPIO_ALT_FUNC_0      = 0x4,
+   GPIO_ALT_FUNC_1      = 0x5,
+   GPIO_ALT_FUNC_2      = 0x6,
+   GPIO_ALT_FUNC_3      = 0x7,
+   GPIO_ALT_FUNC_4      = 0x3,
+   GPIO_ALT_FUNC_5      = 0x2
+
+} GPIO_FSEL_TYPE;
+
+
+typedef enum
+{
+   GPIO_VAL_OFF,
+   GPIO_VAL_ON
+
+} GPIO_VAL_TYPE;
+
+
 
 void delay(uint32_t val);
 void uartPutC(char c);
 void sys(char c);
 uint64_t sysTimerGet(void);
 void sysTimerDelay(uint32_t delayVal);
+void gpioFselSet(uint32_t gpio, GPIO_FSEL_TYPE fsel);
+void gpioValSet(uint32_t gpio, GPIO_VAL_TYPE val);
 
 
 #endif    /* __RPI_ARCH_H */
