@@ -4,13 +4,15 @@
 #include "dlsh.h"
 
 
-#undef	DLSH_ENABLE
+#define	DLSH_ENABLE
 
-#define BLINK_FREQ		1000000		/* 1 sec */
+#define BLINK_FREQ				1000000		/* 1 sec */
+#define SHELL_START_TIMEOUT		5000000		/* 5 sec */
 
 
 void blink(uint32_t freq);
-void blinkWrapper(int argc, char * argv[]);
+void blinkCommand(int argc, char * argv[]);
+void ledCommand(int argc, char * argv[]);
 
 
 /**
@@ -18,22 +20,63 @@ void blinkWrapper(int argc, char * argv[]);
 */
 void entryC(void)
 {
+#ifdef	DLSH_ENABLE
+	int keyPressed = 0;
+#endif
+
 	printStr("\r\n============");
 	printStr("\r\nHello World!");
 	printStr("\r\n============\r\n\r\n");
 
 #ifdef	DLSH_ENABLE
-	dlshRegisterCommand("blink", blinkWrapper);
-	dlshStart(printStr, uartGetC, 1);
+	printValDec(SHELL_START_TIMEOUT / 1000000, "Waiting for key press in ", " seconds...\n");
+	while (sysTimerGet() < SHELL_START_TIMEOUT)
+	{
+		if (uartInputReady())
+		{
+			/* Flush */
+			uartGetC();
+			keyPressed = 1;
+			break;
+		}
+	}
+
+	if (keyPressed)
+	{
+		dlshRegisterCommand("blink", blinkCommand);
+		dlshRegisterCommand("led", ledCommand);
+		dlshStart(printStr, uartGetC, 1);
+	}
 #endif
 
 	blink(BLINK_FREQ);
 }
 
 
-void blinkWrapper(__attribute__((unused)) int argc, __attribute__((unused)) char * argv[])
+void blinkCommand(__attribute__((unused)) int argc, __attribute__((unused)) char * argv[])
 {
 	blink(BLINK_FREQ);
+}
+
+
+void ledCommand(int argc, char * argv[])
+{
+	if ((argc > 1) && (strcmp(argv[1], "on")))
+	{
+		printStr("LED: on\n");
+		gpioValSet(47, GPIO_VAL_ON);
+	}
+	else if ((argc > 1) && (strcmp(argv[1], "off")))
+	{
+		printStr("LED: off\n");
+		gpioValSet(47, GPIO_VAL_OFF);
+	}
+	else
+	{
+		printStr("usage: ");
+		printStr(argv[0]);
+		printStr(" <on|off>\n");
+	}
 }
 
 

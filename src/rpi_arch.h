@@ -99,6 +99,7 @@ typedef enum
 void delay(uint32_t val);
 void uartPutC(char c);
 char uartGetC(void);
+int uartInputReady(void);
 void sys(char c);
 uint64_t sysTimerGet(void);
 void sysTimerDelay(uint32_t delayVal);

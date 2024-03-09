@@ -40,9 +40,15 @@ void uartPutC(char c)
 char uartGetC(void)
 {
 	/* Wait until UART ready */
-	while (regRead32(UART0_FR) & (1 << 4));
-	/* Write character */
+	while (!uartInputReady());
+	/* Read character */
 	return (char)(regRead32(UART0_DR) & 0xff);
+}
+
+
+int uartInputReady(void)
+{
+	return ((regRead32(UART0_FR) & (1 << 4)) ? 0 : 1);
 }
 
 

@@ -4,6 +4,8 @@
 
 
 #define STR_BUFF_SIZE	18
+#define CHAR_NULL		'\0'
+
 
 static char strBuff[STR_BUFF_SIZE];
 
@@ -98,3 +100,24 @@ void printValDec(uint32_t val, char * prefix, char * suffix)
 	printStr(&strBuff[i + 1]);
 	printStr(suffix);
 }
+
+
+int strcmp(const char * str1, const char * str2)
+{
+	int i;
+
+	for (i = 0; i < STR_BUFF_SIZE; i++)
+	{
+		if (str1[i] != str2[i])
+		{
+			return 0;
+		}
+		else if (str1[i] == CHAR_NULL)
+		{
+			return 1;
+		}
+	}
+
+	return 0;
+}
+
