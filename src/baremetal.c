@@ -4,15 +4,13 @@
 #include "dlsh.h"
 
 
-#define	DLSH_ENABLE
-
 #define BLINK_FREQ				1000000		/* 1 sec */
-#define SHELL_START_TIMEOUT		5000000		/* 5 sec */
 
 
-void blink(uint32_t freq);
-void blinkCommand(int argc, char * argv[]);
-void ledCommand(int argc, char * argv[]);
+static void blink(uint32_t freq);
+static void blinkCommand(int argc, char * argv[]);
+static void ledCommand(int argc, char * argv[]);
+static int shellStart(void);
 
 
 /**
@@ -20,34 +18,12 @@ void ledCommand(int argc, char * argv[]);
 */
 void entryC(void)
 {
-#ifdef	DLSH_ENABLE
-	int keyPressed = 0;
-#endif
-
 	printStr("\r\n============");
 	printStr("\r\nHello World!");
 	printStr("\r\n============\r\n\r\n");
 
-#ifdef	DLSH_ENABLE
-	printValDec(SHELL_START_TIMEOUT / 1000000, "Waiting for key press in ", " seconds...\n");
-	while (sysTimerGet() < SHELL_START_TIMEOUT)
-	{
-		if (uartInputReady())
-		{
-			/* Flush */
-			uartGetC();
-			keyPressed = 1;
-			break;
-		}
-	}
-
-	if (keyPressed)
-	{
-		dlshRegisterCommand("blink", blinkCommand);
-		dlshRegisterCommand("led", ledCommand);
-		dlshStart(printStr, uartGetC, 1);
-	}
-#endif
+	dlshRegisterCommand("blink", blinkCommand);
+	dlshRegisterCommand("led", ledCommand);
 
 	blink(BLINK_FREQ);
 }
@@ -55,9 +31,9 @@ void entryC(void)
 
 void blinkCommand(__attribute__((unused)) int argc, __attribute__((unused)) char * argv[])
 {
+	dlshExit();
 	blink(BLINK_FREQ);
 }
-
 
 void ledCommand(int argc, char * argv[])
 {
@@ -80,7 +56,25 @@ void ledCommand(int argc, char * argv[])
 }
 
 
-void blink(uint32_t freq)
+static int shellStart(void)
+{
+	/* Check for key press */
+	if (uartInputReady())
+	{
+		/* Flush */
+		uartGetC();
+		
+		/* Start shell */
+		dlshStart(printStr, uartGetC, 1);
+
+		return 1;
+	}
+
+	return 0;
+}
+
+
+static void blink(uint32_t freq)
 {
 	uint32_t i = 0;
 	uint64_t prevSysTime = 0;
@@ -90,10 +84,15 @@ void blink(uint32_t freq)
 	gpioFselSet(47, GPIO_FSEL_OUTPUT);
 
 	printStr("Start blink @ ");
-	printValDec(freq, "", " Hz\r\n\r\n");
+	printValDec(freq, "", " Hz (press any key to exit)\r\n\r\n");
 
 	while (1)
 	{
+		if (shellStart())
+		{
+			return;
+		}
+
 		/* Set GPIO 47 */
 		gpioValSet(47, GPIO_VAL_ON);
 
@@ -102,6 +101,11 @@ void blink(uint32_t freq)
 
 		/* Clear GPIO 47 */
 		gpioValSet(47, GPIO_VAL_OFF);
+
+		if (shellStart())
+		{
+			return;
+		}
 
 		/* Delay */
 		sysTimerDelay(freq);
