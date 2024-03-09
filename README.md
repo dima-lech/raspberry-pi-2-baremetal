@@ -49,6 +49,10 @@ Note that since first 4 steps involve running on the GPU (VPU / VideoCore IV), t
 - [bcm2835-peripherals.pdf](https://datasheets.raspberrypi.com/bcm2835/bcm2835-peripherals.pdf) (*peripheral addresses are applicable to 2B as well*)
 - [raspberry-pi-2-b-reduced-schematics.pdf](https://datasheets.raspberrypi.com/rpi2/raspberry-pi-2-b-reduced-schematics.pdf)
 
+### Arm Resources
+
+- [Cortex-A7 MPCore Technical Reference Manual](https://developer.arm.com/documentation/ddi0464)
+
 ### Additional Resources
 
 - https://jsandler18.github.io
