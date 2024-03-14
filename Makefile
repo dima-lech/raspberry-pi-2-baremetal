@@ -3,7 +3,7 @@ default: all
 IMAGE_NAME = baremetal
 CROSS_COMPILE=arm-none-eabi-
 CFLAGS = -mcpu=cortex-a7 -fpic -ffreestanding -nostdlib -fno-builtin -Wall -Wextra -g -O0 -Ishell/src -MMD
-OBJS = boot.o baremetal.o rpi_arch.o utils.o dlsh.o
+OBJS = boot.o baremetal.o rpi_arch.o utils.o dlsh.o gpu_test.o
 LINKER_FILE = src/linker.ld
 QEMU_SCRIPT = qemu/run-qemu.sh
 
@@ -51,7 +51,8 @@ $(IMAGE_BIN_FILE): $(IMAGE_ELF_FILE)
 	$(OBJCOPY) $< -O binary $@
 
 $(IMAGE_ELF_FILE): $(OBJS_FILES)
-	$(LD) -T $(LINKER_FILE) -o $@ $^
+	@echo " LD\t$@"
+	@$(LD) -T $(LINKER_FILE) -o $@ $^
 
 $(OBJDUMP_FILE): $(IMAGE_ELF_FILE)
 	$(OBJDUMP) -Sx $< > $@
@@ -64,9 +65,11 @@ $(READELF_FILE): $(IMAGE_ELF_FILE)
 -include $(DEPS_FILES)
 
 obj/%.o: %.s
-	$(GCC) $(CFLAGS) -c $< -o $@
+	@echo " CC\t$<"
+	@$(GCC) $(CFLAGS) -c $< -o $@
 
 obj/%.o: %.c
-	$(GCC) $(CFLAGS) -c $< -o $@
+	@echo " CC\t$<"
+	@$(GCC) $(CFLAGS) -c $< -o $@
 
 
