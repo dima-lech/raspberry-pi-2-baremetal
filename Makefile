@@ -3,7 +3,7 @@ default: all
 IMAGE_NAME = baremetal
 CROSS_COMPILE=arm-none-eabi-
 CFLAGS = -mcpu=cortex-a7 -fpic -ffreestanding -nostdlib -fno-builtin -Wall -Wextra -g -O0 -Ishell/src -MMD
-OBJS = boot.o baremetal.o rpi_arch.o utils.o dlsh.o gpu_test.o
+OBJS = boot.o baremetal.o rpi_arch.o utils.o dlsh.o
 LINKER_FILE = src/linker.ld
 QEMU_SCRIPT = qemu/run-qemu.sh
 
