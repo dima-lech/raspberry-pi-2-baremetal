@@ -39,19 +39,19 @@ void ledCommand(int argc, char * argv[])
 {
 	if ((argc > 1) && (strcmp(argv[1], "on")))
 	{
-		printStr("LED: on\n");
+		printStr("LED: on\r\n");
 		gpioValSet(47, GPIO_VAL_ON);
 	}
 	else if ((argc > 1) && (strcmp(argv[1], "off")))
 	{
-		printStr("LED: off\n");
+		printStr("LED: off\r\n");
 		gpioValSet(47, GPIO_VAL_OFF);
 	}
 	else
 	{
 		printStr("usage: ");
 		printStr(argv[0]);
-		printStr(" <on|off>\n");
+		printStr(" <on|off>\r\n");
 	}
 }
 
@@ -84,7 +84,7 @@ static void blink(uint32_t freq)
 	gpioFselSet(47, GPIO_FSEL_OUTPUT);
 
 	printStr("Start blink @ ");
-	printValDec(freq, "", " Hz (press any key to exit)\r\n\r\n");
+	printValDec(freq, "", " Hz (press any key to exit)\r\n\n");
 
 	while (1)
 	{
