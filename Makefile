@@ -23,16 +23,23 @@ READELF=$(CROSS_COMPILE)readelf
 vpath %.c src shell/src
 vpath %.s src shell/src
 
+.PHONY: sd
 sd: all
 	cp $(IMAGE_BIN_FILE) sd/
 
+.PHONY: qemu
 qemu: all 
 	@chmod +x $(QEMU_SCRIPT)
 	$(QEMU_SCRIPT)
 
+.PHONY: clean
 clean:
 	rm -f obj/* out/* tmp/*
 	rm -f sd/$(IMAGE_NAME).bin
+
+.PHONY: putty
+putty:
+	sudo putty -serial /dev/ttyUSB0 -sercfg 115200,8,n,1,N
 
 obj/:
 	@mkdir -p obj
@@ -43,6 +50,7 @@ out/:
 tmp/:
 	@mkdir -p tmp
 
+.PHONY: all
 all: obj/ out/ tmp/ $(IMAGE_BIN_FILE) $(OBJDUMP_FILE) $(READELF_FILE)
 	@echo -n "\n"
 	@ls -l out/*$(IMAGE_NAME)*
