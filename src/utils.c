@@ -4,10 +4,13 @@
 
 
 #define STR_BUFF_SIZE	18
-#define CHAR_NULL		'\0'
 
 
 static char strBuff[STR_BUFF_SIZE];
+
+
+static char charToHex(char c);
+
 
 
 void printStr(const char * str)
@@ -17,7 +20,7 @@ void printStr(const char * str)
 		return;
 	}
 
-	while (*str != '\0')
+	while (*str != CHAR_NULL)
 	{
 		uartPutC(*str);
 		str++;
@@ -43,7 +46,7 @@ void printValHex(uint64_t val, uint32_t padNum, char * prefix, char * suffix)
 	int32_t i;
 	uint32_t printChars = 0;
 
-	strBuff[STR_BUFF_SIZE - 1] = '\0';
+	strBuff[STR_BUFF_SIZE - 1] = CHAR_NULL;
 
 	for(i = STR_BUFF_SIZE - 2; (i >= 0) && (val > 0); i--)
 	{
@@ -82,7 +85,7 @@ void printValDec(uint32_t val, char * prefix, char * suffix)
 	int32_t i;
 	uint32_t printChars = 0;
 
-	strBuff[STR_BUFF_SIZE - 1] = '\0';
+	strBuff[STR_BUFF_SIZE - 1] = CHAR_NULL;
 
 	for(i = STR_BUFF_SIZE - 2; (i >= 0) && (val > 0); i--)
 	{
@@ -116,6 +119,50 @@ int strcmp(const char * str1, const char * str2)
 		{
 			return 1;
 		}
+	}
+
+	return 0;
+}
+
+
+uint32_t strToHex32(char * str)
+{
+	uint32_t val = 0x0;
+	uint32_t i = 0;
+
+	if (0 == str)
+	{
+		return val;
+	}
+
+	for (i = 0; i < 8; i++)
+	{
+		if (str[i] == CHAR_NULL)
+		{
+			return val;
+		}
+
+		val <<= 4;
+		val |= charToHex(str[i]);
+	}
+
+	return val;
+}
+
+
+static char charToHex(char c)
+{
+	if ((c >= 'a') && (c <= 'f'))
+	{
+		return (c - 'a' + 10);
+	}
+	else if ((c >= 'A') && (c <= 'F'))
+	{
+		return (c - 'A' + 10);
+	}
+	else if ((c >= '0') && (c <= '9'))
+	{
+		return (c - '0');
 	}
 
 	return 0;
