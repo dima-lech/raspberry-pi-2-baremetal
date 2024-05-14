@@ -2,7 +2,7 @@ ENTRY(_start)
 
 SECTIONS
 {
-    . = ENTRY_ADDRESS;
+    . = 0x8000;
 
     .text :
     {

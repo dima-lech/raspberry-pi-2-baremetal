@@ -6,6 +6,6 @@ set -x
 qemu-system-arm \
     -M $machine \
     -dtb qemu/bcm2836-rpi-2-b.dtb \
-    -kernel out/baremetal_qemu.bin \
+    -device loader,file=out/baremetal.bin,addr=0x8000,force-raw=on,cpu-num=0 \
     -m 1G \
     -nographic

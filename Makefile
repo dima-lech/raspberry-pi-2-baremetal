@@ -11,8 +11,6 @@ OBJS_FILES = $(addprefix obj/,$(OBJS))
 DEPS_FILES = $(OBJS_FILES:%.o=%.d)
 IMAGE_BIN_FILE = out/$(IMAGE_NAME).bin
 IMAGE_ELF_FILE = out/$(IMAGE_NAME).elf
-IMAGE_BIN_FILE_QEMU = out/$(IMAGE_NAME)_qemu.bin
-IMAGE_ELF_FILE_QEMU = out/$(IMAGE_NAME)_qemu.elf
 OBJDUMP_FILE = tmp/objdump.txt
 READELF_FILE = tmp/readelf.txt
 
@@ -53,23 +51,16 @@ tmp/:
 	@mkdir -p tmp
 
 .PHONY: all
-all: obj/ out/ tmp/ $(IMAGE_BIN_FILE) $(OBJDUMP_FILE) $(READELF_FILE) $(IMAGE_BIN_FILE_QEMU)
+all: obj/ out/ tmp/ $(IMAGE_BIN_FILE) $(OBJDUMP_FILE) $(READELF_FILE)
 	@echo -n "\n"
 	@ls -l out/*$(IMAGE_NAME)*
 
 $(IMAGE_BIN_FILE): $(IMAGE_ELF_FILE)
 	$(OBJCOPY) $< -O binary $@
 
-$(IMAGE_BIN_FILE_QEMU): $(IMAGE_ELF_FILE_QEMU)
-	$(OBJCOPY) $< -O binary $@
-
 $(IMAGE_ELF_FILE): $(OBJS_FILES)
 	@echo " LD\t$@"
-	@$(LD) -T $(LINKER_FILE) --defsym ENTRY_ADDRESS=0x8000 -o $@ $^
-
-$(IMAGE_ELF_FILE_QEMU): $(OBJS_FILES)
-	@echo " LD\t$@"
-	@$(LD) -T $(LINKER_FILE) --defsym ENTRY_ADDRESS=0x10000 -o $@ $^
+	@$(LD) -T $(LINKER_FILE) -o $@ $^
 
 $(OBJDUMP_FILE): $(IMAGE_ELF_FILE)
 	$(OBJDUMP) -Sx $< > $@
