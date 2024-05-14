@@ -4,7 +4,7 @@
 _start:
 
     /* Setup the stack */
-    mov sp, #0x10000
+    mov sp, #0x8000
 
     /* Load BSS addresses */
     ldr r4, =__bss_start
