@@ -2,14 +2,13 @@
 #include "rpi_arch.h"
 #include "utils.h"
 #include "dlsh.h"
+#include "shell_commands.h"
 
 
 #define BLINK_FREQ				1000000		/* 1 sec */
 
 
-static void blink(uint32_t freq);
-static void blinkCommand(int argc, char * argv[]);
-static void ledCommand(int argc, char * argv[]);
+void blink(void);
 static int shellStart(void);
 
 
@@ -22,37 +21,11 @@ void entryC(void)
 	printStr("\r\nHello World!");
 	printStr("\r\n============\r\n\r\n");
 
-	dlshRegisterCommand("blink", blinkCommand);
-	dlshRegisterCommand("led", ledCommand);
+	/* Register DLSH commands */
+	shRegisterCommands();
 
-	blink(BLINK_FREQ);
-}
-
-
-void blinkCommand(__attribute__((unused)) int argc, __attribute__((unused)) char * argv[])
-{
-	dlshExit();
-	blink(BLINK_FREQ);
-}
-
-void ledCommand(int argc, char * argv[])
-{
-	if ((argc > 1) && (strcmp(argv[1], "on")))
-	{
-		printStr("LED: on\r\n");
-		gpioValSet(47, GPIO_VAL_ON);
-	}
-	else if ((argc > 1) && (strcmp(argv[1], "off")))
-	{
-		printStr("LED: off\r\n");
-		gpioValSet(47, GPIO_VAL_OFF);
-	}
-	else
-	{
-		printStr("usage: ");
-		printStr(argv[0]);
-		printStr(" <on|off>\r\n");
-	}
+	/* Start blink loop */
+	blink();
 }
 
 
@@ -74,7 +47,7 @@ static int shellStart(void)
 }
 
 
-static void blink(uint32_t freq)
+void blink(void)
 {
 	uint32_t i = 0;
 	uint64_t prevSysTime = 0;
@@ -84,7 +57,7 @@ static void blink(uint32_t freq)
 	gpioFselSet(47, GPIO_FSEL_OUTPUT);
 
 	printStr("Start blink @ ");
-	printValDec(freq, "", " Hz (press any key to exit)\r\n\n");
+	printValDec(BLINK_FREQ, "", " Hz (press any key to exit)\r\n\n");
 
 	while (1)
 	{
@@ -97,7 +70,7 @@ static void blink(uint32_t freq)
 		gpioValSet(47, GPIO_VAL_ON);
 
 		/* Delay */
-		sysTimerDelay(freq);
+		sysTimerDelay(BLINK_FREQ);
 
 		/* Clear GPIO 47 */
 		gpioValSet(47, GPIO_VAL_OFF);
@@ -108,7 +81,7 @@ static void blink(uint32_t freq)
 		}
 
 		/* Delay */
-		sysTimerDelay(freq);
+		sysTimerDelay(BLINK_FREQ);
 
 		currSysTime = sysTimerGet();
 		printStr("System timer = ");
