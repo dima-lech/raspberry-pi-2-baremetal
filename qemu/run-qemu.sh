@@ -6,6 +6,6 @@ set -x
 qemu-system-arm \
     -M $machine \
     -dtb qemu/bcm2836-rpi-2-b.dtb \
-    -kernel out/baremetal.bin \
+    -kernel out/baremetal_qemu.bin \
     -m 1G \
     -nographic
