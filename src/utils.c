@@ -168,3 +168,20 @@ static char charToHex(char c)
 	return 0;
 }
 
+
+int strIsHex(char * str)
+{
+	if (0 == str)
+	{
+		return 0;
+	}
+
+	if ((str[0] != '0') || (str[1] != 'x') ||
+		(str[2] == CHAR_NULL))
+	{
+		return 0;
+	}
+
+	return 1;
+}
+
