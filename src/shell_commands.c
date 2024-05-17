@@ -86,7 +86,7 @@ static void shDump(int argc, char * argv[])
 {
 	static int addressIsSet = 0;
 	static uint32_t address = 0x0;
-	uint32_t length = 0x4;
+	static uint32_t length = 0x4;
 	int printUsage = 0;
 	uint32_t value = 0x0;
 	uint32_t i;
@@ -111,6 +111,17 @@ static void shDump(int argc, char * argv[])
 			address = strToHex32(&argv[1][2]);
 			address = address & 0xfffffffc;
 			addressIsSet = 1;
+		}
+	}
+	if (argc >= 3)
+	{
+		if (strIsHex(argv[2]))
+		{
+			length = strToHex32(argv[2]);
+		}
+		else
+		{
+			length = strToDec32(argv[2]);	
 		}
 	}
 

@@ -150,6 +150,31 @@ uint32_t strToHex32(char * str)
 }
 
 
+uint32_t strToDec32(char * str)
+{
+	uint32_t val = 0;
+	uint32_t i = 0;
+
+	if (0 == str)
+	{
+		return val;
+	}
+
+	for (i = 0; i < 8; i++)
+	{
+		if (str[i] == CHAR_NULL)
+		{
+			return val;
+		}
+
+		val *= 10;
+		val += charToHex(str[i]);
+	}
+
+	return val;
+}
+
+
 static char charToHex(char c)
 {
 	if ((c >= 'a') && (c <= 'f'))

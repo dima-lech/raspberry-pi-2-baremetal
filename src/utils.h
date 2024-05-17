@@ -11,6 +11,7 @@ void printValHex(uint64_t val, uint32_t padNum, char * prefix, char * suffix);
 void printValDec(uint32_t val, char * prefix, char * suffix);
 int strcmp(const char * str1, const char * str2);
 uint32_t strToHex32(char * str);
+uint32_t strToDec32(char * str);
 int strIsHex(char * str);
 
 
