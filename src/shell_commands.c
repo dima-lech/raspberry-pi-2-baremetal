@@ -91,6 +91,9 @@ static void shDump(int argc, char * argv[])
 	uint32_t value = 0x0;
 	uint32_t i;
 	uint32_t j;
+	uint32_t k;
+	char charBuffer[17];
+	uint32_t charBufferIndex = 0;
 
 
 	if (argc <= 1)
@@ -148,7 +151,11 @@ static void shDump(int argc, char * argv[])
 		{
 			if (i > 0)
 			{
-				printStr("\r\n");
+				charBuffer[charBufferIndex] = CHAR_NULL;
+				charBufferIndex = 0;
+				printStr("\t/");
+				printStr(charBuffer);
+				printStr("/\r\n");
 			}
 			printValHex(address & 0xfffffff0, 8, "", " :");
 		}
@@ -159,16 +166,49 @@ static void shDump(int argc, char * argv[])
 			for (j = 0; j < ((address % 0x10) / 0x4); j++)
 			{
 				printStr("         ");
+
+				for (k = 0; k < 4; k++)
+				{
+					charBuffer[charBufferIndex++] = ' ';
+				}
 			}
 		}
 
 		value = regRead32(address);
 		printValHex(value, 8, " ", "");
+		for (k = 0; k < 4; k++)
+		{
+			j = value & 0xff;
+			value >>= 8;
+
+			if ((j >= 32) && (j <= 127))
+			{
+				charBuffer[charBufferIndex++] = (char)j;
+			}
+			else
+			{
+				charBuffer[charBufferIndex++] = '.';
+			}
+		}
 
 		address += 0x4;
 	}
 
-	printStr("\r\n");
+	/* Print last blanks */
+	for (i = address; (i % 0x10) != 0x0; i += 4)
+	{
+		printStr("         ");
+
+		for (k = 0; k < 4; k++)
+		{
+			charBuffer[charBufferIndex++] = ' ';
+		}
+	}
+
+	charBuffer[charBufferIndex] = CHAR_NULL;
+	printStr("\t/");
+	printStr(charBuffer);
+	printStr("/\r\n");
 
 }
 
